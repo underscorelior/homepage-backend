@@ -4,7 +4,11 @@
 	"private": true,
 	"devDependencies": {
 		"@vercel/node": "^2.9.6",
+		"supabase": "^1.178.2",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.5.2"
+	},
+	"dependencies": {
+		"@supabase/supabase-js": "^2.44.2"
 	}
 }
