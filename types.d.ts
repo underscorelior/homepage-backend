@@ -20,9 +20,9 @@ interface WeatherSync {
 export interface UserData {
 	code: string;
 	countdown: CountdownSync;
-	created_at: number;
+	created_at: string;
 	id: string;
 	spotify: SpotifySync;
-	updated_at: string | null;
+	updated_at: string;
 	weather: WeatherSync;
 }

@@ -32,6 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		for (const user of users) {
 			if (user.code === code) {
 				valid = true;
+				break;
 			}
 		}
 
@@ -40,13 +41,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 				.status(404)
 				.json({ message: `User with code ${code} already exists!` });
 		}
-		console.log(Array.isArray(data) ? data.toString() : data);
+
 		const insert = {
 			...JSON.parse(Array.isArray(data) ? data.toString() : data),
 			code,
 		};
-
-		console.log(insert);
 
 		const { error: insertError } = await supabase.from('users').insert(insert);
 
