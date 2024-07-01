@@ -14,11 +14,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		return res.json({ code: error.code, message: error.message });
 	}
 
-	data.forEach((user) => {
+	for (const user of data) {
 		if (user.code == code) {
 			return res.json({ ...user });
 		}
-	});
+	}
 
 	// If doesnt exist
 	return res.json({

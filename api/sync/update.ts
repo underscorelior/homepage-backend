@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Database } from '../../database.types';
 import { createClient } from '@supabase/supabase-js';
+import { UserData } from '../../types.d.ts';
 
 const supabase = createClient<Database>(
 	process.env.SUPABASE_URL,
@@ -8,19 +9,46 @@ const supabase = createClient<Database>(
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-	const { code } = req.query;
-	const { data, error } = await supabase.from('users').select();
-	if (error) {
-		return res.json({ code: error.code, message: error.message });
-	}
+	try {
+		const { code, data } = req.query;
 
-	data.forEach((user) => {
-		if (user.code == code) {
-			return res.json({ ...user });
+		if (!code || !data) {
+			return res
+				.status(400)
+				.json({ message: 'Missing code or data in query parameters' });
 		}
-	});
 
-	return res.json({
-		message: `Hello ${code}!`,
-	});
+		const { data: users, error: selectError } = await supabase
+			.from('users')
+			.select();
+
+		if (selectError) {
+			throw selectError;
+		}
+
+		const user = users.find((user: UserData) => user.code === code);
+		if (!user) {
+			return res
+				.status(404)
+				.json({ message: `User with code ${code} not found` });
+		}
+
+		const { error: updateError } = await supabase
+			.from('users')
+			.update(data)
+			.eq('code', code);
+
+		if (updateError) {
+			throw updateError;
+		}
+
+		return res.status(200).json({
+			message: `User with code ${code} has been updated successfully`,
+		});
+	} catch (error) {
+		return res.status(500).json({
+			message: 'An error occurred while processing the request',
+			error: error.message,
+		});
+	}
 }
