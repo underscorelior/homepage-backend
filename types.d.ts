@@ -13,7 +13,7 @@ interface SpotifySync {
 }
 
 interface WeatherSync {
-	temp: 'c' | 'f';
+	unit: 'c' | 'f';
 	enabled: boolean;
 }
 

@@ -5,7 +5,7 @@ function generateRandomWord() {
 	return words[Math.floor(Math.random() * words.length)];
 }
 
-function generateCode() {
+export function generateCode() {
 	const output = [];
 	for (let i = 0; i <= 10; i++) {
 		output.push(generateRandomWord());
