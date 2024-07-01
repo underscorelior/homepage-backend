@@ -13,8 +13,8 @@ interface SpotifySync {
 }
 
 interface WeatherSync {
+	temp: 'c' | 'f';
 	enabled: boolean;
-	temp: 't' | 'f';
 }
 
 export interface UserData {

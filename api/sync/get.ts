@@ -8,20 +8,35 @@ const supabase = createClient<Database>(
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-	const { code } = req.query;
-	const { data, error } = await supabase.from('users').select();
-	if (error) {
-		return res.json({ code: error.code, message: error.message });
-	}
+	try {
+		const { code } = req.query;
 
-	for (const user of data) {
-		if (user.code == code) {
-			return res.json({ ...user });
+		if (!code) {
+			return res
+				.status(400)
+				.json({ message: 'Missing code in query parameters' });
 		}
-	}
 
-	// If doesnt exist
-	return res.json({
-		message: `Hello ${code}!`,
-	});
+		const { data: users, error: selectError } = await supabase
+			.from('users')
+			.select();
+
+		if (selectError) {
+			throw selectError;
+		}
+
+		for (const user of users) {
+			if (user.code == code) {
+				return res.json({ ...user });
+			}
+		}
+		return res
+			.status(404)
+			.json({ message: `User with code ${code} not found` });
+	} catch (error) {
+		return res.status(500).json({
+			message: 'An error occurred while processing the request',
+			error: error.message,
+		});
+	}
 }
