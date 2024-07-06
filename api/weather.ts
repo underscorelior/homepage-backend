@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import axios from 'axios';
 
 const allowCors = (fn) => async (req, res) => {
 	res.setHeader('Access-Control-Allow-Credentials', true);
