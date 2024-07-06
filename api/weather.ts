@@ -23,11 +23,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 	try {
 		const { lon, lat } = req.query;
 
-		const response = await axios.get(
+		const result = await fetch(
 			`https://api.openweathermap.org/data/2.5/weather?lat=${lat}
             &lon=${lon}&units=metric
             &appid=${process.env.WEATHER_KEY}`,
 		);
+		const response = await result.json();
+		console.log(response);
 
 		return res.status(200).json({ response });
 	} catch (error) {
