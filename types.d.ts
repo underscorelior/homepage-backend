@@ -25,4 +25,5 @@ export interface UserData {
 	spotify: SpotifySync;
 	updated_at: string;
 	weather: WeatherSync;
+	theme: 'light' | 'dark';
 }

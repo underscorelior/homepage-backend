@@ -40,6 +40,7 @@ function convertData(data: UserData): User {
 		countdown: data.countdown as unknown as Json,
 		spotify: data.spotify as unknown as Json,
 		weather: data.weather as unknown as Json,
+		theme: data.theme,
 	};
 
 	return output;
@@ -71,6 +72,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 					countdown: user.countdown as unknown as CountdownSync,
 					spotify: user.spotify as unknown as SpotifySync,
 					weather: user.weather as unknown as WeatherSync,
+					theme:
+						user.theme === 'light' || user.theme === 'dark'
+							? user.theme
+							: 'light',
 				};
 				break;
 			}
